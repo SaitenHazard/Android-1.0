@@ -1,0 +1,11 @@
+# Godot-specific ignores
+Game/.import/
+Game/export.cfg
+Game/export_presets.cfg
+
+# Mono-specific ignores
+Game/.mono/
+Game/data_*/
+
+# Custom Ignores
+Records/
