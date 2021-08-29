@@ -40,30 +40,35 @@ func _process(delta):
 	line.points = points_use
 
 func _input(event):
-	if event is InputEventScreenTouch:
+	if event is InputEventScreenTouch and event.is_pressed():
 		state = STATES.JUST_PRESSED
 		touch_position = event.position
 	
-	if event is InputEventScreenDrag:
+	elif event is InputEventScreenDrag:
 		state = STATES.PRESSED
+		touch_position = event.position
 		
-	if not event is InputEventScreenDrag and not event is InputEventScreenTouch:
-		state = STATES.RELEASED
+	else:
+		if not OS.get_name() == "Windows":
+			state = STATES.RELEASED
 	
+#	print(event is InputEventScreenTouch)
+#	print(event.is_pressed())
+#
 	_debug()
 	
 func _debug():
 	if state == STATES.JUST_PRESSED:
 		print('JUST PRESSED')
-		label.text = 'JUST RELEASED'
+#		label.text = 'JUST PRESSED'
 		
 	if state == STATES.PRESSED:
 		print('PRESSED')
-		label.text = 'PRESSED'
+#		label.text = 'PRESSED'
 		
 	if state == STATES.RELEASED:
 		print('RELEASED')
-		label.text = 'RELEASED'
+#		label.text = 'RELEASED'
 
 func _initialize_draw_line():
 	if state == STATES.JUST_PRESSED:
@@ -83,19 +88,18 @@ func _draw_line():
 	if draw_shape:
 		return
 		
-	if state == STATES.JUST_PRESSED:
-		if line_lenght >= max_line_length:
-			return
-				
-		if points_line.empty():
+	if line_lenght < max_line_length:
+		if state == STATES.JUST_PRESSED:
 			points_line.append(touch_position)
 			
-		if points_line[point_index].distance_to(touch_position) > 10:
-			line_lenght = line_lenght + 10
-			points_line.append(touch_position)
-			point_index +=1
-	
+		if state == STATES.PRESSED:
+			if points_line[point_index].distance_to(touch_position) > 10:
+				line_lenght = line_lenght + 10
+				points_line.append(touch_position)
+				point_index +=1
+			
 	if state == STATES.RELEASED:
+		label.text = 'in'
 		points_line = PoolVector2Array()
 		
 	points_use = points_line
