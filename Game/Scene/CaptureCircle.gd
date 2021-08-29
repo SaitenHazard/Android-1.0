@@ -19,6 +19,12 @@ var pointC : Vector2
 var draw_shape : bool = false
 var shape_set : bool = false
 
+onready var label = get_node('/root/World/Control/Label')
+
+enum STATES {PRESSED, JUST_PRESSED, RELEASED}
+
+var state
+
 func get_max_line_length():
 	return max_line_length
 	
@@ -33,17 +39,34 @@ func _process(delta):
 	_find_critter_inside_shape()
 	line.points = points_use
 
-var pressed = false
-
-func _unhandled_input(event):
-	if event is InputEventScreenTouch  and event.pressed:
-		pressed = true
+func _input(event):
+	if event is InputEventScreenTouch:
+		state = STATES.JUST_PRESSED
 		touch_position = event.position
-	else:
-		pressed = false
+	
+	if event is InputEventScreenDrag:
+		state = STATES.PRESSED
+		
+	if not event is InputEventScreenDrag and not event is InputEventScreenTouch:
+		state = STATES.RELEASED
+	
+	_debug()
+	
+func _debug():
+	if state == STATES.JUST_PRESSED:
+		print('JUST PRESSED')
+		label.text = 'JUST RELEASED'
+		
+	if state == STATES.PRESSED:
+		print('PRESSED')
+		label.text = 'PRESSED'
+		
+	if state == STATES.RELEASED:
+		print('RELEASED')
+		label.text = 'RELEASED'
 
 func _initialize_draw_line():
-	if pressed and points_line.empty():
+	if state == STATES.JUST_PRESSED:
 		points_line = PoolVector2Array()
 		draw_shape = false
 		point_index = 0
@@ -60,7 +83,7 @@ func _draw_line():
 	if draw_shape:
 		return
 		
-	if pressed:
+	if state == STATES.JUST_PRESSED:
 		if line_lenght >= max_line_length:
 			return
 				
@@ -71,9 +94,9 @@ func _draw_line():
 			line_lenght = line_lenght + 10
 			points_line.append(touch_position)
 			point_index +=1
-			
-	if not pressed:
-		points_use = PoolVector2Array()
+	
+	if state == STATES.RELEASED:
+		points_line = PoolVector2Array()
 		
 	points_use = points_line
 
