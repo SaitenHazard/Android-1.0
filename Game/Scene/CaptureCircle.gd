@@ -2,13 +2,14 @@ extends Node2D
 
 var points_line = PoolVector2Array()
 var points_shape = PoolVector2Array()
-var points_use = PoolVector2Array()
 var point_index : int = 0
 var touch_position : Vector2
 var line_lenght : int = 0
 
 onready var line = $Line2D
-var max_line_length : int = 1000
+onready var polygon = $Polygon2D
+onready var eraseShapeDelay = $EraseShapeDelay
+var max_line_length : int = 400
 
 #var pointA2Index : Vector2
 #var pointB1Index : Vector2
@@ -33,29 +34,39 @@ func get_line_length():
 
 func _process(delta):
 	_initialize_draw_line()
-	_draw_line()
+	_plot_line()
 	_find_intersecting_point()
-	_draw_shape()
+	_plot_shape()
 	_find_critter_inside_shape()
-	line.points = points_use
+	_erase_shape()
+	_draw_line()
+	_draw_shape()
 
+func _draw_line():
+	if draw_shape:
+		return
+		
+	line.points = points_line
+	
+func _draw_shape():
+	if not draw_shape:
+		return
+	
+	line.points = points_shape
+	polygon.set_polygon(points_shape)
+	
 func _input(event):
 	if event is InputEventScreenTouch and event.is_pressed():
 		state = STATES.JUST_PRESSED
-		touch_position = event.position
+		touch_position = get_canvas_transform().xform_inv(event.position)
 	
 	elif event is InputEventScreenDrag:
 		state = STATES.PRESSED
-		touch_position = event.position
+		touch_position = get_canvas_transform().xform_inv(event.position)
 		
 	else:
 		if not OS.get_name() == "Windows":
 			state = STATES.RELEASED
-	
-#	print(event is InputEventScreenTouch)
-#	print(event.is_pressed())
-#
-	_debug()
 	
 func _debug():
 	if state == STATES.JUST_PRESSED:
@@ -80,31 +91,32 @@ func _initialize_draw_line():
 func _find_critter_inside_shape():
 	if not draw_shape:
 		return
-	var critters = get_node('/root/World/Critters').get_children()
+	var critters = get_node('/root/Control/Critters').get_children()
 	for x in critters.size():
-		var temp = Geometry.is_point_in_polygon(critters[x].get_global_position(), points_use)
+		var temp = Geometry.is_point_in_polygon(critters[x].get_global_position(), points_shape)
 	
-func _draw_line():
+func _plot_line():
 	if draw_shape:
 		return
 		
 	if line_lenght < max_line_length:
+		
 		if state == STATES.JUST_PRESSED:
 			points_line.append(touch_position)
 			
 		if state == STATES.PRESSED:
+			if points_line.size() == 0:
+				points_line.append(touch_position)
+			
 			if points_line[point_index].distance_to(touch_position) > 10:
 				line_lenght = line_lenght + 10
 				points_line.append(touch_position)
 				point_index +=1
 			
 	if state == STATES.RELEASED:
-		label.text = 'in'
 		points_line = PoolVector2Array()
 		
-	points_use = points_line
-
-func _draw_shape():
+func _plot_shape():
 	if not draw_shape:
 		return
 	
@@ -115,9 +127,14 @@ func _draw_shape():
 		points_shape.append(points_line[x])
 		
 	points_shape.append(pointC)
-	points_use = points_shape
-
 	shape_set = true
+	eraseShapeDelay.start(10)
+
+func _erase_shape():
+	print(eraseShapeDelay.time_left)
+	if eraseShapeDelay.is_stopped():
+		print('in')
+		points_shape = PoolVector2Array()
 
 func _find_intersecting_point():
 	if draw_shape:

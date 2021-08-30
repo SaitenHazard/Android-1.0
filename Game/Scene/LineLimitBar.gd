@@ -4,7 +4,7 @@ var max_line_length
 var line_length
 
 #var export CaptureCircle = get_node('/root/World/CaptureCircle')
-onready var CaptureCircle = get_node('/root/World/CaptureCircle')
+onready var CaptureCircle = get_node('/root/Control/CaptureCircle')
 
 func _ready():
 	pass # Replace with function body.

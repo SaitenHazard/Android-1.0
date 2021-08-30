@@ -6,7 +6,28 @@
 
 [sub_resource type="StyleBoxFlat" id=1]
 
-[node name="World" type="Node2D"]
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineLimitBar" type="ProgressBar" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_styles/bg = SubResource( 1 )
+value = 50.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CaptureCircle" parent="." instance=ExtResource( 1 )]
 
@@ -16,32 +37,3 @@ position = Vector2( 34.2947, 40.3051 )
 [node name="Sprite" type="Sprite" parent="Critters"]
 position = Vector2( 395, 181 )
 texture = ExtResource( 3 )
-
-[node name="Control" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LineLimitBar" type="ProgressBar" parent="Control"]
-margin_left = 309.388
-margin_top = 529.776
-margin_right = 711.388
-margin_bottom = 575.776
-custom_styles/bg = SubResource( 1 )
-value = 50.0
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Control"]
-margin_left = 92.0
-margin_top = 43.0
-margin_right = 175.0
-margin_bottom = 144.0
-text = "50"
-__meta__ = {
-"_edit_use_anchors_": false
-}
