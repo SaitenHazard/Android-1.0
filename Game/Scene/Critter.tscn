@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://shaders/critter.shader" type="Shader" id=1]
+[ext_resource path="res://Scripts/Critter.gd" type="Script" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/flash_color = Color( 1, 1, 1, 1 )
+shader_param/flash_modifier = 0.0
+
+[node name="Critter" type="Sprite"]
+material = SubResource( 1 )
+position = Vector2( 395, 181 )
+texture = ExtResource( 3 )
+script = ExtResource( 2 )
+health_max = 5.0
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = -42.3552
+margin_top = 40.1175
+margin_right = 45.6448
+margin_bottom = 54.1175
+value = 50.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}

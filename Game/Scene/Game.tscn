@@ -1,10 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scripts/CaptureCircle.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scene/LineLimitBar.gd" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
-
-[sub_resource type="StyleBoxFlat" id=1]
+[ext_resource path="res://Scene/CaptureCircle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/LineLimitBar.gd" type="Script" id=2]
+[ext_resource path="res://Scene/Critter.tscn" type="PackedScene" id=3]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -22,8 +20,7 @@ anchor_bottom = 1.0
 margin_top = -43.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/bg = SubResource( 1 )
-value = 50.0
+value = 60.0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -34,6 +31,6 @@ __meta__ = {
 [node name="Critters" type="Node2D" parent="."]
 position = Vector2( 34.2947, 40.3051 )
 
-[node name="Sprite" type="Sprite" parent="Critters"]
-position = Vector2( 395, 181 )
-texture = ExtResource( 3 )
+[node name="Critter" parent="Critters" instance=ExtResource( 3 )]
+scale = Vector2( 3, 3 )
+health_max = 10.0
