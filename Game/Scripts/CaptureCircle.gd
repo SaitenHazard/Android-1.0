@@ -33,27 +33,18 @@ func get_line_length():
 	return line_lenght
 
 func _process(delta):
-	_plot_line()
-	_find_intersecting_point()
-	_plot_shape()
-	_find_critter_inside_shape()
+	_animte_afterLight()
 	_draw_line()
-#	_draw_shape()
-
-func _draw_line():
-#	if draw_shape:
-#		return
-		
-	line.points = points_line
+	_find_intersecting_point()
+	_find_critter_inside_shape()
 	
-func _draw_shape():
-#	if not draw_shape:
-#		return
+func _animte_afterLight():
+	if afterLine.default_color.a == 0:
+		return
 	
-	line.points = PoolVector2Array()
-	afterLine.points = points_shape
-#	polygon.set_polygon(points_shape)
-
+	var color_alpha =  lerp(afterLine.default_color.a, 0 , 0.1)
+	afterLine.default_color = Color(afterLine.default_color.r, 
+	afterLine.default_color.g, afterLine.default_color.b, color_alpha)
 	
 func _input(event):
 	if event is InputEventScreenTouch and event.is_pressed():
@@ -68,60 +59,36 @@ func _input(event):
 		if not OS.get_name() == "Windows":
 			state = STATES.RELEASED
 	
-#func _debug():
-#	if state == STATES.JUST_PRESSED:
-#		print('JUST PRESSED')
-##		label.text = 'JUST PRESSED'
-#
-#	if state == STATES.PRESSED:
-#		print('PRESSED')
-##		label.text = 'PRESSED'
-#
-#	if state == STATES.RELEASED:
-#		print('RELEASED')
-##		label.text = 'RELEASED'
-
 func _initialize_draw_line():
 	points_line = PoolVector2Array()
-#	draw_shape = false
 	point_index = 0
 	line_lenght = 0
 		
 func _find_critter_inside_shape():
-#	if not draw_shape:
-#		return
-		
 	var critters = get_node('/root/Control/Critters').get_children()
 	for x in critters.size():
 		var is_in_polygon = Geometry.is_point_in_polygon(critters[x].get_global_position(), points_shape)
 		if is_in_polygon:
 			critters[x].get_hit()
 	
-func _plot_line():
-#	if draw_shape:
-#		return
-		
+func _draw_line():
 	if line_lenght < max_line_length:
-		
 		if state == STATES.JUST_PRESSED:
 			points_line.append(touch_position)
-			
 		if state == STATES.PRESSED:
 			if points_line.size() == 0:
 				points_line.append(touch_position)
-			
 			if points_line[point_index].distance_to(touch_position) > 10:
 				line_lenght = line_lenght + 10
 				points_line.append(touch_position)
 				point_index +=1
 			
 	if state == STATES.RELEASED:
-		points_line = PoolVector2Array()
+		_initialize_draw_line()
 		
-func _plot_shape():
-#	if not draw_shape:
-#		return
-	
+	line.points = points_line
+
+func _draw_shape():
 	points_shape = PoolVector2Array()
 	points_shape.append(pointC)
 	
@@ -130,13 +97,15 @@ func _plot_shape():
 		
 	points_shape.append(pointC)
 	shape_set = true
+	
+	line.points = PoolVector2Array()
+	
+	afterLine.default_color = Color(afterLine.default_color.r, 
+	afterLine.default_color.g, afterLine.default_color.b, 1)
+	afterLine.points = points_shape
 
 func _find_intersecting_point():
-#	if draw_shape:
-#		return
-	
 	if points_line.size() < 3:
-#		draw_shape = false
 		return
 		
 	var pointA1 = points_line[points_line.size()-1]
@@ -149,12 +118,6 @@ func _find_intersecting_point():
 		var found = Geometry.segment_intersects_segment_2d(pointA1, pointA2, pointB1, pointB2)
 		if not found == null:
 			pointC = found
-			_plot_shape()
 			_draw_shape()
 			_initialize_draw_line()
-#			draw_shape = true
 			return
-			
-#	draw_shape = false
-
-
