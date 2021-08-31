@@ -5,10 +5,10 @@
 [ext_resource path="res://Scene/Critter.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+bg_color = Color( 0.196078, 0.25098, 0.329412, 1 )
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0, 0, 0, 1 )
+bg_color = Color( 0.0588235, 0.0117647, 0.160784, 1 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -45,5 +45,17 @@ __meta__ = {
 position = Vector2( 34.2947, 40.3051 )
 
 [node name="Critter" parent="Critters" instance=ExtResource( 3 )]
-position = Vector2( 434.161, 236.756 )
-health_max = 5.0
+position = Vector2( 880, 460 )
+health_max = 3.0
+
+[node name="Critter2" parent="Critters" instance=ExtResource( 3 )]
+position = Vector2( 880, 40 )
+health_max = 3.0
+
+[node name="Critter3" parent="Critters" instance=ExtResource( 3 )]
+position = Vector2( 50, 460 )
+health_max = 3.0
+
+[node name="Critter4" parent="Critters" instance=ExtResource( 3 )]
+position = Vector2( 50, 40 )
+health_max = 3.0

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://shaders/critter.shader" type="Shader" id=1]
 [ext_resource path="res://Scripts/Critter.gd" type="Script" id=2]
-[ext_resource path="res://Sprites/snake_green.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/ghost.png" type="Texture" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
@@ -10,10 +10,10 @@ shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+bg_color = Color( 0.196078, 0.25098, 0.329412, 1 )
 
 [sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0, 0, 0, 1 )
+bg_color = Color( 0.0588235, 0.0117647, 0.160784, 1 )
 
 [sub_resource type="Animation" id=4]
 resource_name = "New Anim"
@@ -37,15 +37,16 @@ script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 material = SubResource( 1 )
-position = Vector2( -0.00386822, -38.5419 )
+position = Vector2( 1.18668, -3.61908 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 3 )
 hframes = 4
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-margin_left = -40.0
-margin_right = 40.0
-margin_bottom = 8.0
+margin_left = -39.9774
+margin_top = 34.9228
+margin_right = 40.0226
+margin_bottom = 42.9228
 custom_styles/fg = SubResource( 2 )
 custom_styles/bg = SubResource( 3 )
 value = 50.0
@@ -55,5 +56,4 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "New Anim"
 "anims/New Anim" = SubResource( 4 )

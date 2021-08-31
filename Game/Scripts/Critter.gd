@@ -5,6 +5,9 @@ var captured : bool = false
 export var health_max : float
 var health_current : float
 
+var limits_min = Vector2(50, 40)
+var limits_max = Vector2(880, 460)
+
 func _ready():
 	health_current = health_max
 	$ProgressBar.max_value = health_max
