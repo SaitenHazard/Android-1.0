@@ -1,28 +1,59 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://shaders/critter.shader" type="Shader" id=1]
 [ext_resource path="res://Scripts/Critter.gd" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/snake_green.png" type="Texture" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
 shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
-[node name="Critter" type="Sprite"]
-material = SubResource( 1 )
-position = Vector2( 395, 181 )
-texture = ExtResource( 3 )
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "New Anim"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[node name="Critter" type="Node2D"]
 script = ExtResource( 2 )
-health_max = 5.0
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 1 )
+position = Vector2( -0.00386822, -38.5419 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 3 )
+hframes = 4
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-margin_left = -42.3552
-margin_top = 40.1175
-margin_right = 45.6448
-margin_bottom = 54.1175
+margin_left = -40.0
+margin_right = 40.0
+margin_bottom = 8.0
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
 value = 50.0
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "New Anim"
+"anims/New Anim" = SubResource( 4 )

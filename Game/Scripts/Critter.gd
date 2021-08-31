@@ -1,4 +1,4 @@
-extends Sprite
+extends Node2D
 
 var captured : bool = false
 
@@ -10,7 +10,7 @@ func _ready():
 	$ProgressBar.max_value = health_max
 
 func get_hit():
-	print(health_current)
+	print('health_current')
 	if health_current == 0:
 		return
 		
@@ -27,6 +27,6 @@ func _do_death():
 	if health_current > 0:
 		return
 	
-	self.material.set_shader_param("flash_color", Color(1,1,1,1))
-	self.material.set_shader_param("flash_modifier", 1)
-	self.scale = lerp(self.scale, Vector2(0,0), 0.1)
+	$Sprite.material.set_shader_param("flash_color", Color(1,1,1,1))
+	$Sprite.material.set_shader_param("flash_modifier", 1)
+	$Sprite.scale = lerp($Sprite.scale, Vector2(0,0), 0.1)

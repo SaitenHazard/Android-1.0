@@ -21,8 +21,7 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
+window/size/height=576
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
@@ -45,4 +44,5 @@ pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
+environment/default_clear_color=Color( 0.14902, 0.168627, 0.266667, 1 )
 environment/default_environment="res://default_env.tres"

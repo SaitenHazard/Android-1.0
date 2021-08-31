@@ -9,7 +9,7 @@ var line_lenght : int = 0
 onready var line = $Line2D
 onready var afterLine = $AfterLine2D
 #onready var polygon = $Polygon2D
-var max_line_length : int = 2000
+var max_line_length : int = 500
 
 #var pointA2Index : Vector2
 #var pointB1Index : Vector2
@@ -36,7 +36,6 @@ func _process(delta):
 	_animte_afterLight()
 	_draw_line()
 	_find_intersecting_point()
-	_find_critter_inside_shape()
 	
 func _animte_afterLight():
 	if afterLine.default_color.a == 0:
@@ -70,6 +69,8 @@ func _find_critter_inside_shape():
 		var is_in_polygon = Geometry.is_point_in_polygon(critters[x].get_global_position(), points_shape)
 		if is_in_polygon:
 			critters[x].get_hit()
+			
+	points_shape = PoolVector2Array()
 	
 func _draw_line():
 	if line_lenght < max_line_length:
@@ -119,5 +120,6 @@ func _find_intersecting_point():
 		if not found == null:
 			pointC = found
 			_draw_shape()
+			_find_critter_inside_shape()
 			_initialize_draw_line()
 			return
