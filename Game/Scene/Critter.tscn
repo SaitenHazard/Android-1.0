@@ -1,26 +1,40 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://shaders/critter.shader" type="Shader" id=1]
 [ext_resource path="res://Scripts/Critter.gd" type="Script" id=2]
-[ext_resource path="res://Sprites/ghost.png" type="Texture" id=3]
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 1 )
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 flash_color: hint_color = vec4(1.0);
+uniform float flash_modifier: hint_range (0.0, 1.0) = 1;
+
+void fragment()
+{
+	vec4 color = texture(TEXTURE, UV);
+	color.rgb = mix(color.rgb, flash_color.rgb, flash_modifier);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
 shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StreamTexture" id=3]
+load_path = "res://.import/ghost.png-629dea890c1035cb9bccdfe41c8f17a5.stex"
+
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.196078, 0.25098, 0.329412, 1 )
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.0588235, 0.0117647, 0.160784, 1 )
 
-[sub_resource type="Animation" id=4]
-resource_name = "New Anim"
+[sub_resource type="Animation" id=6]
 length = 0.8
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -36,10 +50,9 @@ tracks/0/keys = {
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 1 )
-position = Vector2( 1.18668, -3.61908 )
+material = SubResource( 2 )
 scale = Vector2( 3, 3 )
-texture = ExtResource( 3 )
+texture = SubResource( 3 )
 hframes = 4
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
@@ -47,8 +60,8 @@ margin_left = -39.9774
 margin_top = 34.9228
 margin_right = 40.0226
 margin_bottom = 42.9228
-custom_styles/fg = SubResource( 2 )
-custom_styles/bg = SubResource( 3 )
+custom_styles/fg = SubResource( 4 )
+custom_styles/bg = SubResource( 5 )
 value = 50.0
 percent_visible = false
 __meta__ = {
@@ -56,4 +69,6 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-"anims/New Anim" = SubResource( 4 )
+"anims/New Anim" = SubResource( 6 )
+
+[node name="TimerMovement" type="Timer" parent="."]
