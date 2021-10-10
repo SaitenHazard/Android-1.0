@@ -17,6 +17,7 @@ _global_script_class_icons={
 
 config/name="Android 1.0"
 run/main_scene="res://Scene/Game.tscn"
+boot_splash/bg_color=Color( 0.196078, 0.25098, 0.329412, 1 )
 config/icon="res://icon.png"
 
 [display]
