@@ -8,7 +8,7 @@ var line_lenght : int = 0
 
 onready var line = $Line2D
 onready var afterLine = $AfterLine2D
-var max_line_length : int = 1000
+var max_line_length : int = 200
 var lenght_between_points : int = 5
 
 var shape_begin_index : int
