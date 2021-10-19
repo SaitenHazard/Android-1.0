@@ -15,7 +15,6 @@ var shape_begin_index : int
 var segment_segment_intersection : Vector2
 
 var shape_set : bool = false
-var critter_touched : bool = false
 
 onready var label = get_node('/root/World/Control/Label')
 
@@ -30,12 +29,10 @@ func get_line_length():
 	return line_lenght
 
 func _process(delta):
-	if TOUCH_STATE.RELEASED:
-		critter_touched = false
-		
 	_animate_afterLight()
 	_draw_line()
 	_find_segment_segment_intersection()
+	_find_segemnt_ghost_intersection()
 	
 func _animate_afterLight():
 	if afterLine.default_color.a == 0:
@@ -63,12 +60,12 @@ func _initialize_draw_line():
 	point_index = 0
 	line_lenght = 0
 		
-func _find_critter_inside_shape():
-	var critters = get_node('/root/Control/Critters').get_children()
-	for critter in critters:
-		var is_in_polygon = Geometry.is_point_in_polygon(critter.get_global_position(), points_shape)
+func _find_ghost_inside_shape():
+	var ghosts = get_node('/root/Control/Ghosts').get_children()
+	for ghost in ghosts:
+		var is_in_polygon = Geometry.is_point_in_polygon(ghost.get_global_position(), points_shape)
 		if is_in_polygon:
-			critter.get_hit()
+			ghost.get_hit()
 			
 	points_shape = PoolVector2Array()
 	
@@ -84,9 +81,9 @@ func _draw_line():
 				points_line.append(touch_position)
 				point_index +=1
 			
-	if state == TOUCH_STATE.RELEASED or critter_touched:
+	if state == TOUCH_STATE.RELEASED:
 		_initialize_draw_line()
-		
+	
 	line.points = points_line
 
 func _draw_shape():
@@ -121,27 +118,44 @@ func _find_segment_segment_intersection():
 			shape_begin_index = x+1
 			segment_segment_intersection = intersection
 			_draw_shape()
-			_find_critter_inside_shape()
+			_find_ghost_inside_shape()
 			_initialize_draw_line()
 			return
 
-func _find_segemnt_critter_intersection():
+func _find_segemnt_ghost_intersection():
 	if points_line.size() < 2:
 		return
 		
-	var critters = get_node('/root/Control/Critters').get_children()
+	if (get_node('/root/Control/Ghosts') == null):
+		return
+		
+	var ghosts = get_node('/root/Control/Ghosts').get_children()
 	
 	for x in (points_line.size() - 1):
 		var segment_from = points_line[x]
 		var segment_to = points_line[x+1]
-	
-		for critter in critters:
-			var circle_posiiton = critter.position
-			var circle_radius = critter.get_circle_radius()
+		
+		for ghost in ghosts:
+			if ghost.has_method('get_appear'):
+				if not ghost.get_appear():
+					continue
+			
+			var circle_posiiton = ghost.global_position
+			var circle_radius = ghost.get_circle_radius()
 	
 			var critter_found = Geometry.segment_intersects_circle (
 				segment_from, segment_to, circle_posiiton, circle_radius)
 	
 			if not critter_found == -1:
+#				critter_crossed_segement = true
+				get_node('/root/Control/Score').add_score(-1)
 				_initialize_draw_line()
+				_do_floating_text(circle_posiiton)
 				return
+
+var floaty_text_scene = preload("res://Scene/FloatingText.tscn")
+	
+func _do_floating_text(position):
+	var floaty_text = floaty_text_scene.instance()
+	floaty_text.initialize(position, -1)
+	get_tree().root.add_child(floaty_text)

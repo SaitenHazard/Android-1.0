@@ -1,10 +1,12 @@
 extends Node2D
 
-export var max_critter : int = 1
+export var max_ghosts : int = 1
 var clock_range : Vector2 = Vector2(0,3)
 
-onready var critter_r = load('res://Scene/Critter.tscn')
-onready var Critters = get_node('/root/Control/Critters')
+onready var orb_r = load('res://Scene/Ghost/Orb.tscn')
+onready var wisp_r = load('res://Scene/Ghost/Wisp.tscn')
+
+onready var Ghosts = get_node('/root/Control/Ghosts')
 
 onready var GameTimer = get_node('/root/Control/GameTimer')
 
@@ -16,24 +18,25 @@ func _process(delta):
 	
 func _end_game_manager():
 	if GameTimer.is_stopped():
-		Critters.queue_free()
+		Ghosts.queue_free()
 		self.queue_free()
 	
 func _spawn_manager():
-	if Critters == null:
+	if Ghosts == null:
 		return
 		
-	var critter_count = Critters.get_child_count()
+	var ghost_count = Ghosts.get_child_count()
 	
-	if can_spawn and critter_count < max_critter:
+	if can_spawn and ghost_count < max_ghosts:
 		can_spawn = false
 		_spawn()
 		_set_clock()
 
 func _spawn():
-	var critter = critter_r.instance()
-	critter.global_position = self.global_position
-	Critters.add_child(critter)
+#	var ghost = orb_r.instance()
+	var ghost = wisp_r.instance()
+	ghost.global_position = self.global_position
+	Ghosts.add_child(ghost)
 
 func _set_clock():
 	RandomNumberGenerator.new()

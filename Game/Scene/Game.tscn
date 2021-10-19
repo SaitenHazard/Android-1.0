@@ -50,7 +50,6 @@ __meta__ = {
 [node name="Spawner" type="Node2D" parent="."]
 position = Vector2( -5.04535, 6.10352e-05 )
 script = ExtResource( 6 )
-max_critter = 5
 
 [node name="Timer" type="Timer" parent="Spawner"]
 
@@ -113,6 +112,6 @@ one_shot = true
 
 [node name="CaptureCircle" parent="." instance=ExtResource( 1 )]
 
-[node name="Critters" type="Node2D" parent="."]
+[node name="Ghosts" type="Node2D" parent="."]
 position = Vector2( 520, 290 )
 [connection signal="timeout" from="Spawner/Timer" to="Spawner" method="_on_Timer_timeout"]
