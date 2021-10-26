@@ -24,6 +24,7 @@ func get_circle_radius() -> float:
 func _ready():
 	health_current = health_max
 	$ProgressBar.max_value = health_max
+	$Sprite.z_index = 200
 
 func get_hit():
 	if health_current == 0:
@@ -33,7 +34,6 @@ func get_hit():
 	_ani_hit()
 
 func _process(delta):
-	print('in')
 	$ProgressBar.value = health_current
 	_do_death()
 	_move()

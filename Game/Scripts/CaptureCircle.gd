@@ -1,22 +1,22 @@
 extends Node2D
 
+onready var line = $Line2D
+onready var afterLine = $AfterLine2D
+
 var points_line = PoolVector2Array()
 var points_shape = PoolVector2Array()
 var point_index : int = 0
 var touch_position : Vector2
 var line_lenght : int = 0
-
-onready var line = $Line2D
-onready var afterLine = $AfterLine2D
 var max_line_length : int = 200
 var lenght_between_points : int = 5
-
 var shape_begin_index : int
 var segment_segment_intersection : Vector2
-
 var shape_set : bool = false
 
 onready var label = get_node('/root/World/Control/Label')
+
+var floaty_text_scene = preload("res://Scene/FloatingText.tscn")
 
 enum TOUCH_STATE {PRESSED, JUST_PRESSED, RELEASED}
 
@@ -136,25 +136,29 @@ func _find_segemnt_ghost_intersection():
 		var segment_to = points_line[x+1]
 		
 		for ghost in ghosts:
-			if ghost.has_method('get_appear'):
-				if not ghost.get_appear():
+			if _is_a_wisp(ghost):
+				if _is_wist_visible(ghost):
 					continue
-			
+					
 			var circle_posiiton = ghost.global_position
 			var circle_radius = ghost.get_circle_radius()
-	
 			var critter_found = Geometry.segment_intersects_circle (
 				segment_from, segment_to, circle_posiiton, circle_radius)
-	
 			if not critter_found == -1:
-#				critter_crossed_segement = true
 				get_node('/root/Control/Score').add_score(-1)
 				_initialize_draw_line()
 				_do_floating_text(circle_posiiton)
 				return
 
-var floaty_text_scene = preload("res://Scene/FloatingText.tscn")
-	
+func _is_wist_visible(ghost) -> bool:
+	return ghost.get_appear()
+
+func _is_a_wisp(ghost) -> bool :
+	if ghost.has_method('get_appear'):
+		return true
+	else:
+		return false
+
 func _do_floating_text(position):
 	var floaty_text = floaty_text_scene.instance()
 	floaty_text.initialize(position, -1)

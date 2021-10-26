@@ -5,9 +5,9 @@ var clock_range : Vector2 = Vector2(0,3)
 
 onready var orb_r = load('res://Scene/Ghost/Orb.tscn')
 onready var wisp_r = load('res://Scene/Ghost/Wisp.tscn')
+onready var ectoplasm_r = load('res://Scene/Ghost/Ectoplasm.tscn')
 
 onready var Ghosts = get_node('/root/Control/Ghosts')
-
 onready var GameTimer = get_node('/root/Control/GameTimer')
 
 var can_spawn = true
@@ -26,7 +26,6 @@ func _spawn_manager():
 		return
 		
 	var ghost_count = Ghosts.get_child_count()
-	
 	if can_spawn and ghost_count < max_ghosts:
 		can_spawn = false
 		_spawn()
@@ -34,7 +33,8 @@ func _spawn_manager():
 
 func _spawn():
 #	var ghost = orb_r.instance()
-	var ghost = wisp_r.instance()
+#	var ghost = wisp_r.instance()
+	var ghost = ectoplasm_r.instance()
 	ghost.global_position = self.global_position
 	Ghosts.add_child(ghost)
 

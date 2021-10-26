@@ -6,7 +6,7 @@ func get_appear() -> bool:
 	return appear
 	
 func _process(delta):
-	appear = true
+	_disappear()
 	
 func _disappear():
 	if $TimerDisappear.is_stopped():
@@ -27,8 +27,8 @@ func _set_disappear():
 	$TimerDisappear.start(clock)
 	appear = !appear
 
-#func get_hit():
-#	if not appear:
-#		return
-#
-#	.get_hit()
+func get_hit():
+	if not appear:
+		return
+
+	.get_hit()
